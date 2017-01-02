@@ -1,7 +1,8 @@
-CC = gcc -pthread
-CFLAGS = -g -Wall `sdl-config --cflags`
-BMECONV = ../bme/bmeconv
-LIBS = -L../bme -lbme -lm `sdl-config --libs`
+CC = emcc
+CFLAGS = -Wall
+BMECONV = echo BMECONV does not appear to work under NodeJS. ignoring... You could try running this command manually to see if it works: node ../bme/bmeconv.js
+LIBS = -L../bme -lbme -lm
+SUFFIX = .html
 
 all: ../missions/original.blk ../missions/test.blk ../data/bofh.pal	\
 ../data/splash.pal ../data/splash.raw ../data/title.spr			\
@@ -9,15 +10,15 @@ all: ../missions/original.blk ../missions/test.blk ../data/bofh.pal	\
 ../data/fistman.spr ../data/gunman.spr ../data/shotgman.spr		\
 ../data/uziman.spr ../data/tech.spr ../data/closet.spr			\
 ../data/leader.spr ../data/sadist.spr ../data/bigfnt.spr		\
-../data/smallfnt.spr ../data/blackfnt.spr ../data/editor.spr ../bofh	\
-../bofhedit
+../data/smallfnt.spr ../data/blackfnt.spr ../data/editor.spr ../bofh$(SUFFIX)	\
+../bofhedit$(SUFFIX)
 .PHONY: all
 
-../bofh: actor.o bofh.o bomb.o enemy.o hiscore.o init.o sincos.o
-	$(CC) $^ $(LIBS) -o$@
+../bofh$(SUFFIX): actor.o bofh.o bomb.o enemy.o hiscore.o init.o sincos.o
+	$(CC) $^ $(LIBS) -o $@ --preload-file ../data --preload-file ../missions --preload-file ../bofh.cfg@bofh.cfg
 
-../bofhedit: bofhedit.o endian.o
-	$(CC) $^ $(LIBS) -o$@
+../bofhedit$(SUFFIX): bofhedit.o endian.o
+	$(CC) $^ $(LIBS) -o $@
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $<
@@ -41,7 +42,7 @@ all: ../missions/original.blk ../missions/test.blk ../data/bofh.pal	\
 	$(BMECONV) -s -t255 -r254 -h253 $< $@
 
 clean:
-	rm -f ../bofh ../bofhedit *.o 
-	rm -f ../missions/original.blk ../missions/test.blk
-	rm -f ../data/*.pal ../data/*.raw ../data/*.spr
+	-rm -f ../bofh$(SUFFIX) ../bofhedit$(SUFFIX) *.o 
+	-rm -f ../missions/original.blk ../missions/test.blk
+	-rm -f ../data/*.pal ../data/*.raw ../data/*.spr
 .PHONY: clean
