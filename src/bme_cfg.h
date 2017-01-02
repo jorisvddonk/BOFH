@@ -13,5 +13,8 @@
                                  // this can be set during running of program
 
 #define MAX_KEYS 512
+#ifdef __EMSCRIPTEN__
+#define MAX_KEYS 2048
+#endif
 
 #endif
