@@ -135,7 +135,9 @@ int kbd_waitkey(void)
             }
         }
 
+#ifndef __EMSCRIPTEN__
         SDL_Delay(15);
+#endif
     }
 }
 

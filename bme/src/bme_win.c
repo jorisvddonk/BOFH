@@ -99,7 +99,9 @@ int win_getspeed(int framerate)
         frames = win_framecounter / frametime;
         win_framecounter -= frames * frametime;
 
+#ifndef __EMSCRIPTEN__
         if (!frames) SDL_Delay((frametime - win_framecounter)/10);
+#endif
     }
 
     return frames;
