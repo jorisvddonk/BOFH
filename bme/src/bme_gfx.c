@@ -13,6 +13,10 @@
 #include "bme_io.h"
 #include "bme_err.h"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 // Prototypes
 
 int gfx_init(unsigned xsize, unsigned ysize, unsigned framerate, unsigned flags);
@@ -199,6 +203,9 @@ void gfx_updatepage(void)
             SDL_UnlockSurface(gfx_screen);
             SDL_Flip(gfx_screen);
         }
+        #ifdef __EMSCRIPTEN__
+        emscripten_sleep(10);
+        #endif
     }
 }
 
