@@ -1,5 +1,6 @@
 CC = emcc
-CFLAGS = -Wall
+EMTERPRET = -s EMTERPRETIFY=1 -s EMTERPRETIFY_ASYNC=1
+CFLAGS = -Wall $(EMTERPRET)
 BMECONV = echo BMECONV does not appear to work under NodeJS. ignoring... You could try running this command manually to see if it works: node ../bme/bmeconv.js
 LIBS = -L../bme -lbme -lm
 SUFFIX = .html
@@ -15,7 +16,7 @@ all: ../missions/original.blk ../missions/test.blk ../data/bofh.pal	\
 .PHONY: all
 
 ../bofh$(SUFFIX): actor.o bofh.o bomb.o enemy.o hiscore.o init.o sincos.o
-	$(CC) $^ $(LIBS) -o $@ --preload-file ../data --preload-file ../missions --preload-file ../bofh.cfg@bofh.cfg
+	$(CC) $^ $(LIBS) $(EMTERPRET) -o $@ --preload-file ../data --preload-file ../missions --preload-file ../bofh.cfg@bofh.cfg
 
 ../bofhedit$(SUFFIX): bofhedit.o endian.o
 	$(CC) $^ $(LIBS) -o $@
@@ -43,6 +44,6 @@ all: ../missions/original.blk ../missions/test.blk ../data/bofh.pal	\
 
 clean:
 	-rm -f ../bofh$(SUFFIX) ../bofhedit$(SUFFIX) *.o 
-	-rm -f ../missions/original.blk ../missions/test.blk
-	-rm -f ../data/*.pal ../data/*.raw ../data/*.spr
+#	-rm -f ../missions/original.blk ../missions/test.blk
+#	-rm -f ../data/*.pal ../data/*.raw ../data/*.spr
 .PHONY: clean

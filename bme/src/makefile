@@ -4,7 +4,8 @@
 
 CC = emcc
 AR = emar
-CFLAGS = -O0 -Wall
+EMTERPRET = -s EMTERPRETIFY=1 -s EMTERPRETIFY_ASYNC=1
+CFLAGS = -O0 -Wall $(EMTERPRET)
 LIBS = 
 PREFIX = ../
 SUFFIX = .js
@@ -22,8 +23,8 @@ all: $(PREFIX)libbme.a $(so) $(PREFIX)bmeconv$(SUFFIX) $(PREFIX)datafile$(SUFFIX
 clean: linkclean
 	-rm -f *.o
 	-rm -f mapdata.c
-	-rm -f mapedit.dat
-	-rm -f *.spr
+#	-rm -f mapedit.dat
+#	-rm -f *.spr
 .PHONY: clean
 
 linkclean:
